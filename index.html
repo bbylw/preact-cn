@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="Preact 中文技术刊物：4kB 的虚拟 DOM、可观测的 diff 过程、可插拔的渲染调度器、服务端渲染与补水，以及 preact/compat 兼容层。"
+    />
+    <meta name="theme-color" content="#f4f3ef" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Preact 中文 · 4kB 的虚拟 DOM</title>
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('preact-cn-theme');
+          var theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到正文</a>
+    <div class="scroll-progress" aria-hidden="true"><span class="scroll-progress__bar"></span></div>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
