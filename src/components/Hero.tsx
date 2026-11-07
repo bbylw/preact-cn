@@ -11,7 +11,7 @@ function ByteGrid(props: { theme: Theme }) {
 		const ctx = canvas?.getContext('2d');
 		if (!canvas || !ctx) return;
 
-		const side = 384;
+		const side = Math.round(canvas.getBoundingClientRect().width) || 384;
 		const cols = SIZE.grid;
 		const step = side / cols;
 		const total = cols * cols;
@@ -29,7 +29,7 @@ function ByteGrid(props: { theme: Theme }) {
 			const y = Math.floor(index / cols) * step + step / 2;
 			ctx.beginPath();
 			ctx.fillStyle = color;
-			ctx.arc(x, y, 1.35, 0, Math.PI * 2);
+			ctx.arc(x, y, step * 0.225, 0, Math.PI * 2);
 			ctx.fill();
 		};
 
@@ -108,8 +108,7 @@ export function Hero(props: { theme: Theme }) {
 					</h1>
 
 					<p class="hero__lede">
-						与 React API 完全一致、体积小巧的现代替代方案。拥有虚拟 DOM 组件的全部能力，却没有相应的开销。
-						这一页不是截图：下面的每个实验台，都由本站正在运行的 Preact {PREACT_VERSION} 亲自驱动。
+						{`与 React API 完全一致、体积小巧的现代替代方案。拥有虚拟 DOM 组件的全部能力，却没有相应的开销。这一页不是截图：下面的每个实验台，都由本站正在运行的 Preact ${PREACT_VERSION} 亲自驱动。`}
 					</p>
 
 					<div class="hero__actions">

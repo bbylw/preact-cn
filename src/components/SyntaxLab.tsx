@@ -127,8 +127,7 @@ export function SyntaxLab() {
 
 				<div class="section__aside">
 					<p class="prose">
-						兼容不是模拟出来的：本站的 Vite 配置把 react 与 react-dom 指向 preact/compat，因此既有 React 组件无需改写。
-						想省掉构建步骤时，HTM 让同样的树直接写在标签模板里。
+						兼容不是模拟出来的：本站的 Vite 配置把 <code>react</code> 与 <code>react-dom</code> 指向 <code>preact/compat</code>，因此既有 React 组件无需改写。想省掉构建步骤时，<code>HTM</code> 让同样的树直接写在标签模板里。
 					</p>
 					<CodeBlock snippet={active.snippet} />
 					<p class="aside-note mono">ARIA TABS · ← → HOME END</p>

@@ -83,8 +83,7 @@ export function SsrLab() {
 			<div class="section__split" data-reveal>
 				<div class="section__aside">
 					<p class="prose">
-						服务端把组件渲染成字符串随页面送达；浏览器端不做重建，而是沿已有 DOM 对齐虚拟树、挂上事件与后续更新。
-						接管完成后，下面这枚按钮的计数器才会开始工作。
+						服务端把组件渲染成字符串随页面送达；浏览器端用 <code>hydrate()</code> 沿已有 DOM 对齐虚拟树、挂上事件与后续更新。接管完成后，下面这枚按钮的计数器才会开始工作。
 					</p>
 					<CodeBlock snippet={CODE.ssr} />
 					<ol class="pipeline mono">

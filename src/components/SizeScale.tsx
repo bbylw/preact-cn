@@ -5,12 +5,14 @@ import { SectionHead } from './ui';
 export function SizeScale() {
 	const preactRef = useRef<HTMLSpanElement>(null);
 	const stackRef = useRef<HTMLSpanElement>(null);
+	const barRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
 		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 		const paint = (value: number) => {
 			if (preactRef.current) preactRef.current.textContent = (SIZE.preact * value).toFixed(1);
 			if (stackRef.current) stackRef.current.textContent = (SIZE.reactStack * value).toFixed(0);
+			if (barRef.current) barRef.current.style.transform = `scaleX(${value})`;
 		};
 		if (reduce) {
 			paint(1);
@@ -67,7 +69,7 @@ export function SizeScale() {
 							<b>Preact</b>
 						</div>
 						<div class="scale__track">
-							<span class="scale__bar scale__bar--brand" style={{ width: `${ratio}%` }} />
+							<span ref={barRef} class="scale__bar scale__bar--brand" style={{ width: `${ratio}%` }} />
 						</div>
 						<div class="scale__value">
 							<span ref={preactRef}>0.0</span>
@@ -95,8 +97,7 @@ export function SizeScale() {
 
 				<div class="scale__notes">
 					<p class="prose">
-						首屏的点阵是 64 × 64 = 4 096 个点，每一点代表一字节。整个运行时就装在这个方格子里：
-						虚拟 DOM、组件、diff、事件、hydration 与调度入口都在其中。
+						{'首屏的点阵是 64 × 64 = 4 096 个点，每一点代表一字节。整个运行时就装在这个方格子里：虚拟 DOM、组件、diff、事件、hydration 与调度入口都在其中。'}
 					</p>
 					<ul class="scale__list">
 						<li>

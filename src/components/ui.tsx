@@ -60,10 +60,14 @@ export function CopyButton(props: { value: string; label?: string }) {
 		<button
 			type="button"
 			class={`copy-btn${state === 'fail' ? ' copy-btn--fail' : ''}`}
+			data-state={state}
 			onClick={copy}
 			aria-label={props.label ?? '复制代码'}
 		>
-			<span aria-hidden="true" class="copy-btn__mark" />
+			<svg viewBox="0 0 16 16" aria-hidden="true">
+				<rect x="5.5" y="5.5" width="7.5" height="7.5" rx="1.4" />
+				<path d="M3.2 10.8V4.6A1.4 1.4 0 0 1 4.6 3.2h6.2" />
+			</svg>
 			{state === 'ok' ? '已复制' : state === 'fail' ? '复制失败' : (props.label ?? '复制')}
 			<span class="sr-only" role="status">
 				{state === 'ok' ? '代码已复制到剪贴板' : state === 'fail' ? '复制失败，请手动选择' : ''}

@@ -167,7 +167,7 @@ render(<Badge label="Preact" />, document.body);`,
 	alias: {
 		title: 'preact/compat 别名',
 		lang: 'ts',
-		code: `// vite.config.ts —— 本站真实配置
+		code: `// vite.config.ts：本站真实配置
 resolve: {
   alias: [
     { find: /^react$/, replacement: 'preact/compat' },

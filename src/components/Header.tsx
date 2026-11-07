@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'preact/hooks';
 import type { Theme } from '../lib/theme';
 import { PREACT_VERSION } from '../data/content';
 
@@ -13,6 +14,23 @@ const NAV = [
 
 export function Header(props: { theme: Theme; onToggle: () => void; lifted: boolean }) {
 	const dark = props.theme === 'dark';
+	const [active, setActive] = useState('');
+
+	useEffect(() => {
+		const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'));
+		if (!sections.length) return;
+		const observer = new IntersectionObserver(
+			entries => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) setActive(entry.target.id);
+				}
+			},
+			{ rootMargin: '-42% 0px -54% 0px', threshold: 0 }
+		);
+		sections.forEach(section => observer.observe(section));
+		return () => observer.disconnect();
+	}, []);
+
 	return (
 		<header class={`topbar${props.lifted ? ' topbar--lifted' : ''}`}>
 			<div class="topbar__inner shell">
@@ -25,7 +43,11 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 
 				<nav class="topnav" aria-label="站内导航">
 					{NAV.map(item => (
-						<a key={item.href} href={item.href}>
+						<a
+							key={item.href}
+							href={item.href}
+							aria-current={active === item.href.slice(1) ? 'true' : undefined}
+						>
 							{item.label}
 						</a>
 					))}

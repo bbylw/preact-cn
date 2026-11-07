@@ -195,7 +195,7 @@ export function SchedulerLab() {
 						) : (
 							<ol>
 								{lines.map((line, index) => (
-									<li key={index} class="mono">
+									<li key={line} class="mono">
 										<span>{String(index + 1).padStart(2, '0')}</span>
 										{line}
 									</li>
@@ -207,8 +207,7 @@ export function SchedulerLab() {
 
 				<div class="section__aside">
 					<p class="prose">
-						调度器不是配置项，而是 Preact 暴露出来的一个函数钩子。默认用微任务合并更新，换掉它就能把渲染对齐到动画帧、
-						或推迟到浏览器空闲时。整个过程对组件代码完全透明。
+						调度器不是配置项，而是 Preact 暴露出来的 <code>options.debounceRendering</code> 钩子。默认用微任务合并更新，换掉它就能把渲染对齐到动画帧、或推迟到浏览器空闲时。整个过程对组件代码完全透明。
 					</p>
 					<CodeBlock snippet={CODE.scheduler} />
 					<p class="aside-note mono">OPTIONS ARE GLOBAL · RESTORED AFTER EACH RUN</p>

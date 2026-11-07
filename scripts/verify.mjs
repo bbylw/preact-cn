@@ -200,6 +200,10 @@ async function interactions(page) {
 	await page.waitForTimeout(150);
 	const pings = await page.locator('#ssr .ssr-card__count').innerText();
 	check('ssr / 事件已被接管', pings.includes('1'), pings);
+	const whiteSpace = await page.evaluate(
+		() => getComputedStyle(document.querySelector('#ssr .html-out pre')).whiteSpace
+	);
+	check('ssr / 输出自动折行', whiteSpace === 'pre-wrap', whiteSpace);
 
 	// 04 三种写法产出相同标记
 	await page.locator('#syntax').scrollIntoViewIfNeeded();
@@ -211,7 +215,24 @@ async function interactions(page) {
 		check(`syntax / ${name} 标记一致`, match === '一致' && badge === 1, `${match} badge=${badge}`);
 	}
 
-	// 05 主题切换
+	// 05 导航当前区块高亮
+	await page.locator('#ssr').scrollIntoViewIfNeeded();
+	await page.waitForTimeout(450);
+	const current = await page.locator('.topnav a[href="#ssr"]').getAttribute('aria-current');
+	check('nav / 当前区块高亮', current === 'true', String(current));
+
+	// 06 体积条与数字动画
+	await page.locator('#scale').scrollIntoViewIfNeeded();
+	await page.waitForTimeout(1600);
+	const scaleValue = (await page.locator('#scale .scale__value').first().innerText()).trim();
+	const barScale = await page.evaluate(() => {
+		const element = document.querySelector('#scale .scale__bar--brand');
+		return new DOMMatrixReadOnly(getComputedStyle(element).transform).a;
+	});
+	check('scale / 数字计数到 4.0', scaleValue.startsWith('4.0'), scaleValue);
+	check('scale / 品牌条展开', barScale > 0.9, String(barScale));
+
+	// 07 主题切换
 	const before = await page.evaluate(() => document.documentElement.dataset.theme);
 	await page.locator('.theme-toggle').click();
 	await page.waitForTimeout(150);

@@ -135,8 +135,7 @@ export function DiffLab() {
 			<div class="section__split" data-reveal>
 				<div class="section__aside">
 					<p class="prose">
-						Preact 在内部计算新旧树之间的差异，以尽可能少的 DOM 操作完成更新。组件把 diff 的范围收敛到自身挂载点，
-						所以应用变大时，单次更新并不会重新遍历整页。
+						Preact 在内部计算新旧树之间的差异，以尽可能少的 DOM 操作完成更新。组件把 <code>diff</code> 的范围收敛到自身挂载点，所以应用变大时，单次更新并不会重新遍历整页。
 					</p>
 					<CodeBlock snippet={CODE.render} />
 					<p class="aside-note mono">OBSERVING childList · characterData</p>
@@ -191,7 +190,7 @@ export function DiffLab() {
 						) : (
 							<ol>
 								{log.map((line, index) => (
-									<li key={index} class="mono">
+									<li key={line} class="mono">
 										<span>{String(log.length - index).padStart(2, '0')}</span>
 										{line}
 									</li>

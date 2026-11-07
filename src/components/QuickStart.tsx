@@ -29,11 +29,11 @@ export function QuickStart() {
 						<a class="btn btn--primary" href={LINKS.site} target="_blank" rel="noreferrer">
 							访问 Preact 官网
 						</a>
-						<a class="btn" href={LINKS.repo} target="_blank" rel="noreferrer">
-							GitHub 源码
+						<a class="start__link mono" href={LINKS.repo} target="_blank" rel="noreferrer">
+							GitHub 源码 ↗
 						</a>
-						<a class="btn" href={LINKS.awesome} target="_blank" rel="noreferrer">
-							awesome-preact 列表
+						<a class="start__link mono" href={LINKS.awesome} target="_blank" rel="noreferrer">
+							awesome-preact ↗
 						</a>
 					</div>
 				</div>
