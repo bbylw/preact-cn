@@ -81,15 +81,15 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 						aria-label={dark ? '切换到浅色主题' : '切换到深色主题'}
 						aria-pressed={dark}
 					>
-						<svg viewBox="0 0 20 20" aria-hidden="true">
-							{dark ? (
-								<path d="M16.2 12.8A6.8 6.8 0 0 1 7.2 3.8a6.8 6.8 0 1 0 9 9Z" />
-							) : (
-								<>
-									<circle cx="10" cy="10" r="3.7" />
-									<path d="M10 1v2.1M10 16.9V19M1 10h2.1M16.9 10H19M3.6 3.6l1.5 1.5M14.9 14.9l1.5 1.5M16.4 3.6l-1.5 1.5M5.1 14.9l-1.5 1.5" />
-								</>
-							)}
+						<svg class="theme-toggle__icon" viewBox="0 0 20 20" aria-hidden="true">
+							<path
+								class="theme-toggle__frame"
+								d="M10 2 17 6v8l-7 4-7-4V6l7-4Z"
+							/>
+							<path
+								class="theme-toggle__shade"
+								d="M10 5.6a4.4 4.4 0 0 1 0 8.8V5.6Z"
+							/>
 						</svg>
 						<span class="mono">{dark ? 'DARK' : 'LIGHT'}</span>
 					</button>

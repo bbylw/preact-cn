@@ -144,7 +144,7 @@ export function DiffLab() {
 
 			<div class="hero__workbench" data-reveal>
 				<div class="instrument__head mono">
-					<span>LIVE WORKBENCH / COMPONENT → DOM</span>
+					<span>LIVE WORKBENCH / RENDER PATH</span>
 					<span class="instrument__live"><i aria-hidden="true" /> RUNNING</span>
 				</div>
 					<div class="hero__workspace">
@@ -166,7 +166,7 @@ export function DiffLab() {
 								<span class="field__label mono">下一次状态</span>
 								<input id="hero-title-input" type="text" value={draft} onInput={event => setDraft(event.currentTarget.value)} onKeyDown={event => { if (event.key === 'Enter') rerender(); }} maxLength={28} />
 							</label>
-							<button type="button" class="btn btn--primary" onClick={rerender}>运行更新 <span aria-hidden="true">↗</span></button>
+							<button type="button" class="btn btn--primary" onClick={rerender}>运行更新</button>
 						</div>
 						<p class="hero__source-note mono">useState → render() → 最小 DOM 更新</p>
 					</div>
@@ -189,8 +189,11 @@ export function DiffLab() {
 					</div>
 				</div>
 				<div class="hero__bench-foot mono">
-					<span>INPUT → COMPONENT STATE → VIRTUAL DOM → REAL DOM</span>
-					<a href="#diff">继续查看完整变更日志 ↓</a>
+					<span class="hero__bench-path">
+						<span class="hero__bench-path__full">INPUT → COMPONENT STATE → VIRTUAL DOM → REAL DOM</span>
+						<span class="hero__bench-path__short">INPUT → VDOM → DOM</span>
+					</span>
+					<a href="#diff">查看完整变更日志</a>
 				</div>
 			</div>
 		</section>

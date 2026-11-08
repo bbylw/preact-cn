@@ -74,7 +74,7 @@ export function App() {
 				<div class="shell footer__bottom mono">
 					<span>PREACT / 第 01 期</span>
 					<span>BUILT WITH PREACT + TYPESCRIPT + VITE + BUN</span>
-					<a href="#top">回到顶部 ↑</a>
+					<a href="#top">回到顶部</a>
 				</div>
 			</footer>
 		</>

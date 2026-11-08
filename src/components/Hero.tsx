@@ -112,12 +112,7 @@ export function Hero(props: { theme: Theme }) {
 					</p>
 
 					<div class="hero__actions">
-						<a class="btn btn--primary" href="#diff">
-							进入 diff 实验台
-							<svg viewBox="0 0 16 16" aria-hidden="true">
-								<path d="M2 8h11M9 4l4 4-4 4" />
-							</svg>
-						</a>
+<a class="btn btn--primary" href="#diff">进入 diff 实验台</a>
 						<CopyButton value="bun add preact" label="复制安装命令" />
 					</div>
 

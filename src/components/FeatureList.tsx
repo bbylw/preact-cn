@@ -21,7 +21,7 @@ export function FeatureList() {
 						<span class="mono">/ CAPABILITIES</span>
 					</div>
 					<a class="text-link" href="#scheduler">
-						继续探索调度器 →
+						探索调度器
 					</a>
 				</aside>
 

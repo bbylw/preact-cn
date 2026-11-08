@@ -30,10 +30,10 @@ export function QuickStart() {
 							访问 Preact 官网
 						</a>
 						<a class="start__link mono" href={LINKS.repo} target="_blank" rel="noreferrer">
-							GitHub 源码 ↗
+							GitHub 源码
 						</a>
 						<a class="start__link mono" href={LINKS.awesome} target="_blank" rel="noreferrer">
-							awesome-preact ↗
+							awesome-preact
 						</a>
 					</div>
 				</div>
