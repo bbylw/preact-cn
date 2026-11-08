@@ -54,7 +54,7 @@ export function App() {
 					<div class="footer__lead">
 						<span class="eyebrow">COLOPHON</span>
 						<p>
-							{`本站是非官方的中文技术刊物，内容整理自 Preact 官方 README，所有实验台均由页面内运行的 Preact ${PREACT_VERSION} 现场执行。`}
+							{`所有实验台均由页面内运行的 Preact ${PREACT_VERSION} 现场执行。`}
 						</p>
 						<span class="mono footer__stamp">MIT · NO FRAMEWORK OVERHEAD</span>
 					</div>
@@ -74,7 +74,7 @@ export function App() {
 					</div>
 				</div>
 				<div class="shell footer__bottom mono">
-					<span>PREACT 中文 / 第 01 期</span>
+					<span>PREACT / 第 01 期</span>
 					<span>BUILT WITH PREACT + TYPESCRIPT + VITE + BUN</span>
 					<a href="#top">回到顶部 ↑</a>
 				</div>

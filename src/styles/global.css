@@ -250,14 +250,6 @@ body .scroll-progress__bar {
   letter-spacing: -0.04em;
 }
 
-.brand__cn {
-  margin-left: 6px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  color: var(--ink-3);
-}
-
 .topnav {
   display: flex;
   align-items: center;
@@ -1711,7 +1703,6 @@ body .scroll-progress__bar {
 }
 
 @media (max-width: 460px) {
-  .brand__cn,
   .theme-toggle span,
   .hero__issue {
     display: none;

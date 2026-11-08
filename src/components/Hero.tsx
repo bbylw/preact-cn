@@ -96,7 +96,7 @@ export function Hero(props: { theme: Theme }) {
 			<div class="hero__grid">
 				<div class="hero__copy" data-reveal>
 					<div class="hero__eyebrow">
-						<span class="eyebrow">中文技术刊物 · 第 01 期</span>
+						<span class="eyebrow">技术刊物 · 第 01 期</span>
 						<span class="hero__rule" />
 						<span class="mono hero__issue">PREACT / VIRTUAL DOM</span>
 					</div>

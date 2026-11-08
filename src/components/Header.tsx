@@ -34,11 +34,11 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 	return (
 		<header class={`topbar${props.lifted ? ' topbar--lifted' : ''}`}>
 			<div class="topbar__inner shell">
-				<a class="brand" href="#top" aria-label="Preact 中文，回到顶部">
+				<a class="brand" href="#top" aria-label="Preact，回到顶部">
 					<svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
 						<path d="M16 3 29 10v12L16 29 3 22V10L16 3Zm0 3.6L6.4 12l9.6 5.5 9.6-5.5L16 6.6ZM5.4 14.5v7.3l9.6 5.5v-7.3l-9.6-5.5Zm11.2 12.8 9.6-5.5v-7.3l-9.6 5.5v7.3Z" />
 					</svg>
-					<span class="brand__name">Preact<span class="brand__cn">中文</span></span>
+					<span class="brand__name">Preact</span>
 				</a>
 
 				<nav class="topnav" aria-label="站内导航">
