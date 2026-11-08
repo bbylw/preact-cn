@@ -71,11 +71,16 @@ async function audit(page, label, theme) {
 			navClipped: (() => {
 				const nav = document.querySelector('.topnav');
 				if (!nav) return 0;
+				nav.style.scrollBehavior = 'auto';
 				const box = nav.getBoundingClientRect();
-				return Array.from(nav.querySelectorAll('a')).filter(link => {
+				let inaccessible = 0;
+				for (const link of nav.querySelectorAll('a')) {
+					link.focus();
 					const rect = link.getBoundingClientRect();
-					return rect.right > box.right + 1 || rect.left < box.left - 1;
-				}).length;
+					if (rect.right > box.right + 1 || rect.left < box.left - 1) inaccessible++;
+				}
+				nav.scrollTo({ left: 0, behavior: 'instant' });
+				return inaccessible;
 			})(),
 		};
 		return out;
@@ -256,11 +261,15 @@ async function responsiveScan() {
 				})
 				.filter(item => item && (item.left < 12 || item.right < 12));
 			const nav = document.querySelector('.topnav');
+			nav.style.scrollBehavior = 'auto';
 			const box = nav.getBoundingClientRect();
-			const clipped = Array.from(nav.querySelectorAll('a')).filter(link => {
+			let clipped = 0;
+			for (const link of nav.querySelectorAll('a')) {
+				link.focus();
 				const rect = link.getBoundingClientRect();
-				return rect.right > box.right + 1 || rect.left < box.left - 1;
-			}).length;
+				if (rect.right > box.right + 1 || rect.left < box.left - 1) clipped++;
+			}
+			nav.scrollTo({ left: 0, behavior: 'instant' });
 			return { overflow: document.documentElement.scrollWidth - vw, edges, clipped };
 		});
 		check(`宽度 ${width} / 无横向溢出`, state.overflow <= 1, `${state.overflow}px`);

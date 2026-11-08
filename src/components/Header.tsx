@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Theme } from '../lib/theme';
 import { PREACT_VERSION } from '../data/content';
 
@@ -14,6 +14,7 @@ const NAV = [
 
 export function Header(props: { theme: Theme; onToggle: () => void; lifted: boolean }) {
 	const dark = props.theme === 'dark';
+	const navRef = useRef<HTMLElement>(null);
 	const [active, setActive] = useState('');
 
 	useEffect(() => {
@@ -31,6 +32,29 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 		return () => observer.disconnect();
 	}, []);
 
+	useEffect(() => {
+		const nav = navRef.current;
+		const link = nav?.querySelector<HTMLAnchorElement>('[aria-current="true"]');
+		if (!nav || !link || nav.scrollWidth <= nav.clientWidth) return;
+
+		const navBounds = nav.getBoundingClientRect();
+		const linkBounds = link.getBoundingClientRect();
+		const fade = parseFloat(getComputedStyle(nav).maskImage.match(/calc\(100% - ([\d.]+)px\)/)?.[1] ?? '0');
+		const visibleRight = navBounds.right - fade - 6;
+
+		if (linkBounds.right > visibleRight) {
+			nav.scrollBy({
+				left: linkBounds.right - visibleRight,
+				behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+			});
+		} else if (linkBounds.left < navBounds.left + 4) {
+			nav.scrollBy({
+				left: linkBounds.left - navBounds.left - 4,
+				behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+			});
+		}
+	}, [active]);
+
 	return (
 		<header class={`topbar${props.lifted ? ' topbar--lifted' : ''}`}>
 			<div class="topbar__inner shell">
@@ -41,7 +65,7 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 					<span class="brand__name">Preact</span>
 				</a>
 
-				<nav class="topnav" aria-label="站内导航">
+				<nav ref={navRef} class="topnav" aria-label="站内导航（可横向滚动）">
 					{NAV.map(item => (
 						<a
 							key={item.href}

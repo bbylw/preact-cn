@@ -2,7 +2,7 @@
   --paper: #f4f3ef;
   --paper-2: #eceae3;
   --surface: #fbfaf7;
-  --paper-veil: #f4f3efe8;
+  --paper-veil: #f4f3eff7;
   --ink: #17181c;
   --ink-2: #494c53;
   --ink-3: #666970;
@@ -28,7 +28,7 @@ html[data-theme='dark'] {
   --paper: #121317;
   --paper-2: #1a1c22;
   --surface: #191b21;
-  --paper-veil: #121317e8;
+  --paper-veil: #121317f7;
   --ink: #f0efe9;
   --ink-2: #b7b9c0;
   --ink-3: #8b8e97;
@@ -197,7 +197,7 @@ body .scroll-progress__bar {
 .section {
   max-width: 1400px;
   margin-inline: auto;
-  padding-block: clamp(72px, 9vw, 132px);
+  padding-block: clamp(64px, 7.5vw, 108px);
   padding-inline: clamp(20px, 4vw, 64px);
 }
 
@@ -233,6 +233,7 @@ body .scroll-progress__bar {
 
 .brand {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
   gap: 10px;
   text-decoration: none;
@@ -264,11 +265,14 @@ body .scroll-progress__bar {
 }
 
 .topnav a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
   flex: 0 0 auto;
   text-decoration: none;
   font-size: 13px;
   color: var(--ink-2);
-  padding-block: 8px;
+  padding: 8px 2px;
   border-bottom: 1px solid transparent;
 }
 
@@ -296,6 +300,7 @@ body .scroll-progress__bar {
 
 .theme-toggle {
   display: inline-flex;
+  min-height: 40px;
   align-items: center;
   gap: 8px;
   padding: 7px 11px;
@@ -392,7 +397,9 @@ body .scroll-progress__bar {
 }
 
 .text-link {
-  display: inline-block;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   margin-top: 24px;
   color: var(--brand);
   font-size: 14px;
@@ -465,6 +472,7 @@ body .scroll-progress__bar {
 
 .copy-btn {
   display: inline-flex;
+  min-height: 40px;
   align-items: center;
   gap: 8px;
   padding: 7px 11px;
@@ -496,6 +504,7 @@ body .scroll-progress__bar {
 }
 
 .text-btn {
+  min-height: 40px;
   padding: 0;
   border: 0;
   background: none;
@@ -652,6 +661,7 @@ body .scroll-progress__bar {
 
 .field input {
   width: 100%;
+  min-height: 44px;
   padding: 11px 13px;
   border: 1px solid var(--line);
   border-radius: var(--r-control);
@@ -1143,6 +1153,7 @@ body .scroll-progress__bar {
 }
 
 .segmented button {
+  min-height: 44px;
   padding: 9px 14px;
   border: 0;
   border-right: 1px solid var(--line);
@@ -1197,6 +1208,7 @@ body .scroll-progress__bar {
 }
 
 .ssr-card button {
+  min-height: 44px;
   margin-top: 14px;
   padding: 8px 14px;
   border: 1px solid var(--brand);
@@ -1250,6 +1262,7 @@ body .scroll-progress__bar {
 }
 
 .tabs button {
+  min-height: 48px;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1549,6 +1562,10 @@ body .scroll-progress__bar {
 }
 
 .footer__links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding-block: 4px;
   font-size: 13px;
   color: var(--ink-2);
   text-decoration: none;
@@ -1612,7 +1629,11 @@ body .scroll-progress__bar {
 
 @media (max-width: 760px) {
   html {
-    scroll-padding-top: 132px;
+    scroll-padding-top: 112px;
+  }
+
+  .topnav a:not([aria-current='true'])::after {
+    content: none;
   }
 
   .topbar__inner {
@@ -1623,16 +1644,38 @@ body .scroll-progress__bar {
 
   .topnav {
     order: 3;
-    flex-basis: 100%;
-    flex-wrap: wrap;
-    overflow: visible;
-    gap: 4px 14px;
-    padding-bottom: 6px;
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 0;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-padding-inline: 20px;
+    scroll-snap-type: x proximity;
+    scroll-behavior: smooth;
+    padding-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 12px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 12px), transparent 100%);
   }
 
   .topnav a {
+    min-height: 44px;
+    justify-content: center;
+    scroll-snap-align: start;
     font-size: 12px;
-    padding-block: 4px;
+    padding: 8px 4px;
+  }
+
+  .topnav::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  .topnav::-webkit-scrollbar-thumb {
+    background: var(--line);
   }
 
   .topbar__tools {
@@ -1709,6 +1752,9 @@ body .scroll-progress__bar {
   }
 
   .theme-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
     padding: 8px;
   }
 
@@ -1821,7 +1867,6 @@ body {
 }
 
 .copy-btn {
-  min-height: 34px;
   justify-content: center;
 }
 
@@ -1906,6 +1951,14 @@ body {
 @media (max-width: 760px) {
   .codeblock__pre {
     font-size: 12px;
+  }
+
+  .field input {
+    font-size: 16px;
+  }
+
+  .copy-btn {
+    min-height: 40px;
   }
 }
 
@@ -2012,6 +2065,9 @@ html:not(.has-js) .scale__bar--brand {
 /* ---------- footer ---------- */
 
 .footer__bottom a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   color: var(--ink-2);
   text-decoration: none;
   border-bottom: 1px solid var(--line);
@@ -2043,6 +2099,9 @@ html[data-theme='dark'] {
 }
 
 .start__link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
   padding-bottom: 2px;
   border-bottom: 1px solid var(--line);
   color: var(--ink-2);
@@ -2057,20 +2116,26 @@ html[data-theme='dark'] {
   }
 }
 
-/* ---------- narrow navigation ---------- */
-
-@media (max-width: 460px) {
-  .topnav {
-    display: grid;
-    grid-template-columns: repeat(4, auto);
-    justify-content: space-between;
-    gap: 6px 10px;
-  }
-
-  .topnav a {
-    font-size: 11.5px;
+@media (pointer: coarse) {
+  .topnav a,
+  .theme-toggle,
+  .copy-btn,
+  .btn,
+  .text-link,
+  .segmented button,
+  .ssr-card button,
+  .tabs button,
+  .start__link,
+  .text-btn,
+  .footer__links a,
+  .footer__bottom a {
+    min-height: 44px;
   }
 }
+
+/* ---------- narrow navigation ---------- */
+
+
 
 .codeblock__note {
   font-size: 12.5px;
