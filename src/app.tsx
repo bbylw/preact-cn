@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'preact/hooks';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { FeatureList } from './components/FeatureList';
 import { DiffLab } from './components/DiffLab';
+import { FeatureList } from './components/FeatureList';
 import { SchedulerLab } from './components/SchedulerLab';
 import { SsrLab } from './components/SsrLab';
 import { SyntaxLab } from './components/SyntaxLab';
@@ -39,9 +38,8 @@ export function App() {
 			<Header theme={theme} onToggle={toggle} lifted={lifted} />
 
 			<main id="main">
-				<Hero theme={theme} />
-				<FeatureList />
 				<DiffLab />
+				<FeatureList />
 				<SchedulerLab />
 				<SsrLab />
 				<SyntaxLab />

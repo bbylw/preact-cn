@@ -3,8 +3,9 @@ import type { Theme } from '../lib/theme';
 import { PREACT_VERSION } from '../data/content';
 
 const NAV = [
+	{ href: '#top', label: '渲染路径' },
 	{ href: '#features', label: '能力' },
-	{ href: '#diff', label: 'Diff 实验台' },
+	{ href: '#diff', label: 'Diff 细节' },
 	{ href: '#scheduler', label: '调度器' },
 	{ href: '#ssr', label: 'SSR 与补水' },
 	{ href: '#syntax', label: '三种写法' },
@@ -34,24 +35,18 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 
 	useEffect(() => {
 		const nav = navRef.current;
-		const link = nav?.querySelector<HTMLAnchorElement>('[aria-current="true"]');
+		const link = nav?.querySelector<HTMLAnchorElement>(`a[href="#${active}"]`);
 		if (!nav || !link || nav.scrollWidth <= nav.clientWidth) return;
 
 		const navBounds = nav.getBoundingClientRect();
 		const linkBounds = link.getBoundingClientRect();
-		const fade = parseFloat(getComputedStyle(nav).maskImage.match(/calc\(100% - ([\d.]+)px\)/)?.[1] ?? '0');
-		const visibleRight = navBounds.right - fade - 6;
+		const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const behavior = reducedMotion ? 'instant' : 'smooth';
 
-		if (linkBounds.right > visibleRight) {
-			nav.scrollBy({
-				left: linkBounds.right - visibleRight,
-				behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-			});
+		if (linkBounds.right > navBounds.right - 4) {
+			nav.scrollBy({ left: linkBounds.right - navBounds.right + 10, behavior });
 		} else if (linkBounds.left < navBounds.left + 4) {
-			nav.scrollBy({
-				left: linkBounds.left - navBounds.left - 4,
-				behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
-			});
+			nav.scrollBy({ left: linkBounds.left - navBounds.left - 10, behavior });
 		}
 	}, [active]);
 

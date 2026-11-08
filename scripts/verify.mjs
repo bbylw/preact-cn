@@ -45,15 +45,7 @@ async function audit(page, label, theme) {
 			).length,
 			theme: document.documentElement.dataset.theme,
 			tokens: document.querySelectorAll('.tok-k').length,
-			canvas: (() => {
-				const canvas = document.querySelector('.bytegrid');
-				if (!canvas) return 0;
-				const ctx = canvas.getContext('2d');
-				const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-				let painted = 0;
-				for (let i = 3; i < data.length; i += 4) if (data[i] > 0) painted++;
-				return painted;
-			})(),
+			demo: document.querySelector('.hero__workbench') ? 1 : 0,
 			edges: (() => {
 				const list = [];
 				for (const section of document.querySelectorAll('main section')) {
@@ -72,14 +64,16 @@ async function audit(page, label, theme) {
 				const nav = document.querySelector('.topnav');
 				if (!nav) return 0;
 				nav.style.scrollBehavior = 'auto';
+				nav.style.scrollSnapType = 'none';
 				const box = nav.getBoundingClientRect();
 				let inaccessible = 0;
 				for (const link of nav.querySelectorAll('a')) {
-					link.focus();
+					link.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'instant' });
 					const rect = link.getBoundingClientRect();
 					if (rect.right > box.right + 1 || rect.left < box.left - 1) inaccessible++;
 				}
 				nav.scrollTo({ left: 0, behavior: 'instant' });
+				nav.style.scrollSnapType = '';
 				return inaccessible;
 			})(),
 		};
@@ -91,7 +85,7 @@ async function audit(page, label, theme) {
 	check(`${label} / 无空链接`, result.emptyLinks === 0, `${result.emptyLinks} 处`);
 	check(`${label} / 主题正确`, result.theme === theme, `期望 ${theme}，实际 ${result.theme}`);
 	check(`${label} / 代码高亮已生成`, result.tokens > 0, `${result.tokens} 个 token`);
-	check(`${label} / 4kB 点阵已绘制`, result.canvas > 1000, `${result.canvas} 个像素`);
+	check(`${label} / 实时渲染工作台`, result.demo === 1, `工作台=${result.demo}`);
 	check(`${label} / 章节左右留白`, result.edges.length === 0, result.edges.join(' | '));
 	check(`${label} / 导航未被裁切`, result.navClipped === 0, `${result.navClipped} 项`);
 
@@ -262,14 +256,16 @@ async function responsiveScan() {
 				.filter(item => item && (item.left < 12 || item.right < 12));
 			const nav = document.querySelector('.topnav');
 			nav.style.scrollBehavior = 'auto';
+			nav.style.scrollSnapType = 'none';
 			const box = nav.getBoundingClientRect();
 			let clipped = 0;
 			for (const link of nav.querySelectorAll('a')) {
-				link.focus();
+				link.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'instant' });
 				const rect = link.getBoundingClientRect();
 				if (rect.right > box.right + 1 || rect.left < box.left - 1) clipped++;
 			}
 			nav.scrollTo({ left: 0, behavior: 'instant' });
+			nav.style.scrollSnapType = '';
 			return { overflow: document.documentElement.scrollWidth - vw, edges, clipped };
 		});
 		check(`宽度 ${width} / 无横向溢出`, state.overflow <= 1, `${state.overflow}px`);

@@ -1,7 +1,7 @@
 import { render } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { CODE } from '../data/content';
-import { CodeBlock, Panel, SectionHead, Stat } from './ui';
+import { CODE, PREACT_VERSION } from '../data/content';
+import { CopyButton, CodeBlock, Panel, SectionHead, Stat } from './ui';
 
 const INITIAL_ITEMS = ['保留的段落节点', '保留的列表节点'];
 
@@ -13,7 +13,7 @@ function DiffTree(props: { title: string; items: string[] }) {
 			<p class="dtree__desc">同一个容器，第二次 render() 复用已有 DOM。</p>
 			<ul class="dtree__list">
 				{props.items.map((item, index) => (
-					<li key={`${index}-${item}`}>
+					<li key={index}>
 						<span class="mono">{String(index + 1).padStart(2, '0')}</span>
 						{item}
 					</li>
@@ -32,7 +32,8 @@ interface DiffStat {
 
 export function DiffLab() {
 	const hostRef = useRef<HTMLDivElement>(null);
-	const observerRef = useRef<MutationObserver | null>(null);
+	const heroHostRef = useRef<HTMLDivElement>(null);
+	const observerRef = useRef<MutationObserver[]>([]);
 	const [draft, setDraft] = useState('Hello World!');
 	const [title, setTitle] = useState('Hello');
 	const [items, setItems] = useState<string[]>([...INITIAL_ITEMS]);
@@ -41,43 +42,46 @@ export function DiffLab() {
 	const [stat, setStat] = useState<DiffStat>({ mutations: 0, type: '—', target: '—', ms: 0 });
 	const [log, setLog] = useState<string[]>([]);
 
-	const connect = (host: HTMLElement) => {
-		observerRef.current?.disconnect();
-		const observer = new MutationObserver(() => {});
-		observer.observe(host, { childList: true, subtree: true, characterData: true });
-		observerRef.current = observer;
-		return observer;
+	const connect = (hosts: HTMLElement[]) => {
+		observerRef.current.forEach(observer => observer.disconnect());
+		observerRef.current = hosts.map(host => {
+			const observer = new MutationObserver(() => {});
+			observer.observe(host, { childList: true, subtree: true, characterData: true });
+			return observer;
+		});
 	};
 
 	const mount = (nextTitle: string, nextItems: string[]) => {
-		const host = hostRef.current;
-		if (!host) return;
-		const observer = connect(host);
-		render(<DiffTree title={nextTitle} items={nextItems} />, host);
-		observer.takeRecords();
-		setMountNodes(host.querySelectorAll('*').length);
+		const hosts = [heroHostRef.current, hostRef.current].filter((host): host is HTMLDivElement => host !== null);
+		if (!hosts.length) return;
+		connect(hosts);
+		hosts.forEach((host, index) => {
+			render(<DiffTree title={nextTitle} items={nextItems} />, host);
+			observerRef.current[index]?.takeRecords();
+		});
+		setMountNodes(hosts[0].querySelectorAll('*').length);
 	};
 
 	useEffect(() => {
 		mount('Hello', [...INITIAL_ITEMS]);
 		setLog(['render #1 · 首次挂载 · 建立整棵树，写入全部节点']);
 		return () => {
-			observerRef.current?.disconnect();
-			observerRef.current = null;
+			observerRef.current.forEach(observer => observer.disconnect());
+			observerRef.current = [];
 			if (hostRef.current) render(null, hostRef.current);
+			if (heroHostRef.current) render(null, heroHostRef.current);
 		};
 	}, []);
 
 	const paint = (nextTitle: string, nextItems: string[], reason: string) => {
-		const host = hostRef.current;
-		const observer = observerRef.current;
-		if (!host || !observer) return;
+		const hosts = [heroHostRef.current, hostRef.current].filter((host): host is HTMLDivElement => host !== null);
+		if (!hosts.length || observerRef.current.length !== hosts.length) return;
 
-		observer.takeRecords();
+		observerRef.current.forEach(observer => observer.takeRecords());
 		const started = performance.now();
-		render(<DiffTree title={nextTitle} items={nextItems} />, host);
+		hosts.forEach(host => render(<DiffTree title={nextTitle} items={nextItems} />, host));
 		const ms = performance.now() - started;
-		const records = observer.takeRecords();
+		const records = observerRef.current.flatMap(observer => observer.takeRecords());
 
 		const types = Array.from(new Set(records.map(record => record.type))).join(' + ') || '无';
 		const targets =
@@ -124,9 +128,76 @@ export function DiffLab() {
 	};
 
 	return (
+		<>
+		<section class="hero shell" id="top">
+			<header class="hero__intro" data-reveal>
+				<div>
+					<div class="hero__eyebrow">
+						<span class="eyebrow">PREACT / RENDER PATH</span>
+						<span class="hero__rule" />
+						<span class="mono hero__issue">运行中的 Preact {PREACT_VERSION}</span>
+					</div>
+					<h1 class="hero__title">改一行，<em>只更新该更新的</em></h1>
+				</div>
+				<p class="hero__lede">改动组件状态，观察 Preact 如何复用真实 DOM。不是录屏，也不是模拟：下面的树由本站正在运行的 Preact 渲染，变更由浏览器原生 MutationObserver 逐条记录。</p>
+			</header>
+
+			<div class="hero__workbench" data-reveal>
+				<div class="instrument__head mono">
+					<span>LIVE WORKBENCH / COMPONENT → DOM</span>
+					<span class="instrument__live"><i aria-hidden="true" /> RUNNING</span>
+				</div>
+					<div class="hero__workspace">
+					<div class="hero__source">
+						<div class="hero__pane-head">
+							<span class="mono">COMPONENT / JSX</span>
+							<CopyButton value={"const [title, setTitle] = useState('Hello');\\n\\nconst update = () => {\\n  setTitle(draft);\\n  render(<DiffTree title={draft} />, host);\\n};"} label="复制片段" />
+						</div>
+						<div class="hero__editor-code" aria-label="正在运行的 Preact 组件">
+							<div><span class="tok-k">const</span> [title, setTitle] = useState(<span class="tok-s">'Hello'</span>);</div>
+							<div class="hero__code-gap" />
+							<div><span class="tok-k">const</span> update = () =&gt; {'{'}</div>
+							<div class="hero__code-indent">setTitle(draft);</div>
+							<div class="hero__code-indent"><span class="tok-f">render</span>(&lt;DiffTree title={'{draft}'} /&gt;, host);</div>
+							<div>{'}'};</div>
+						</div>
+						<div class="hero__state-control">
+							<label class="field" for="hero-title-input">
+								<span class="field__label mono">下一次状态</span>
+								<input id="hero-title-input" type="text" value={draft} onInput={event => setDraft(event.currentTarget.value)} onKeyDown={event => { if (event.key === 'Enter') rerender(); }} maxLength={28} />
+							</label>
+							<button type="button" class="btn btn--primary" onClick={rerender}>运行更新 <span aria-hidden="true">↗</span></button>
+						</div>
+						<p class="hero__source-note mono">useState → render() → 最小 DOM 更新</p>
+					</div>
+
+					<div class="hero__rendered">
+						<div class="hero__pane-head">
+							<span class="mono">REAL DOM / REUSED IN PLACE</span>
+							<span class="mono hero__render-count">render #{renderCount}</span>
+						</div>
+						<div class="hero__live-tree">
+							<div class="hero__tree-caption mono">&lt;main&gt; / DiffTree</div>
+							<div class="diff-host" ref={heroHostRef} />
+							<div class="hero__tree-foot mono">
+								<span>每棵树挂载 <b>{mountNodes}</b></span>
+								<span>双视图变更 <b>{stat.mutations}</b></span>
+								<span>render <b>{stat.ms.toFixed(2)}ms</b></span>
+							</div>
+						</div>
+						<p class="hero__source-note mono">MutationObserver · {stat.type} · {stat.target}</p>
+					</div>
+				</div>
+				<div class="hero__bench-foot mono">
+					<span>INPUT → COMPONENT STATE → VIRTUAL DOM → REAL DOM</span>
+					<a href="#diff">继续查看完整变更日志 ↓</a>
+				</div>
+			</div>
+		</section>
+
 		<section class="band section" id="diff">
 			<SectionHead
-				index="02"
+				index="01"
 				kicker="DIFF / MUTATION OBSERVER"
 				title="一次 render，究竟改了几个节点？"
 				note="官方 README 说第二次 render() 只会更新 <h1> 的文本。这里挂了一棵真的 Preact 树，并用浏览器原生的 MutationObserver 把变更数出来。"
@@ -151,9 +222,10 @@ export function DiffLab() {
 					</Panel>
 
 					<div class="controls">
-						<label class="field">
+						<label class="field" for="diff-title-input">
 							<span class="field__label mono">新的标题文本</span>
 							<input
+								id="diff-title-input"
 								type="text"
 								value={draft}
 								onInput={event => setDraft(event.currentTarget.value)}
@@ -201,5 +273,6 @@ export function DiffLab() {
 				</div>
 			</div>
 		</section>
+		</>
 	);
 }
