@@ -1,5 +1,8 @@
 import { chromium } from 'playwright-core';
 
+const NPM_URL = 'https://www.npmjs.com/package/preact';
+const NPM_BADGE = 'img.shields.io/npm/v/preact';
+
 const BASE = process.env.VERIFY_BASE ?? 'http://127.0.0.1:8199/';
 const CHROME = process.env.CHROME_PATH ?? 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 
@@ -44,6 +47,15 @@ async function audit(page, label, theme) {
 				link => !link.getAttribute('href') || link.getAttribute('href') === '#'
 			).length,
 			theme: document.documentElement.dataset.theme,
+			versionLink: document.querySelector('.version')?.getAttribute('href') ?? '',
+			versionBadge: document.querySelector('.version__badge')?.getAttribute('src') ?? '',
+			versionFallback: document.querySelector('.version__fallback')?.textContent?.trim() ?? '',
+			obsoleteVersionCopy: document.body.innerText.includes('npm 最新版本见顶部徽标'),
+			runtimeVersionClaims: (
+				document.body.innerText.match(
+					/运行中的 Preact\s*\d|页面内运行的 Preact\s*\d|技术栈：Preact\s*\d/g
+				) ?? []
+			).length,
 			tokens: document.querySelectorAll('.tok-k').length,
 			demo: document.querySelector('.hero__workbench') ? 1 : 0,
 			edges: (() => {
@@ -84,6 +96,21 @@ async function audit(page, label, theme) {
 	check(`${label} / 无横向溢出`, result.overflow <= 1, `超出 ${result.overflow}px`);
 	check(`${label} / 无空链接`, result.emptyLinks === 0, `${result.emptyLinks} 处`);
 	check(`${label} / 主题正确`, result.theme === theme, `期望 ${theme}，实际 ${result.theme}`);
+	check(
+		`${label} / npm 最新版本链接`,
+		result.versionLink === NPM_URL,
+		`期望 ${NPM_URL}，实际 ${result.versionLink || '空'}`
+	);
+	check(
+		`${label} / npm 最新版本徽标`,
+		result.versionBadge.includes(NPM_BADGE) || result.versionFallback === 'npm 最新',
+		`badge=${result.versionBadge || '空'} fallback=${result.versionFallback || '空'}`
+	);
+	check(
+		`${label} / 版本文案已清理`,
+		!result.obsoleteVersionCopy && result.runtimeVersionClaims === 0,
+		`obsolete=${result.obsoleteVersionCopy} claims=${result.runtimeVersionClaims}`
+	);
 	check(`${label} / 代码高亮已生成`, result.tokens > 0, `${result.tokens} 个 token`);
 	check(`${label} / 实时渲染工作台`, result.demo === 1, `工作台=${result.demo}`);
 	check(`${label} / 章节左右留白`, result.edges.length === 0, result.edges.join(' | '));

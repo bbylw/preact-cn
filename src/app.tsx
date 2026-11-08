@@ -7,7 +7,7 @@ import { SsrLab } from './components/SsrLab';
 import { SyntaxLab } from './components/SyntaxLab';
 import { SizeScale } from './components/SizeScale';
 import { QuickStart } from './components/QuickStart';
-import { LINKS, PREACT_VERSION } from './data/content';
+import { LINKS } from './data/content';
 import { useTheme } from './lib/theme';
 import { initReveal } from './lib/useReveal';
 
@@ -52,7 +52,7 @@ export function App() {
 					<div class="footer__lead">
 						<span class="eyebrow">COLOPHON</span>
 						<p>
-							{`所有实验台均由页面内运行的 Preact ${PREACT_VERSION} 现场执行。`}
+							所有实验台均由页面内运行的 Preact 现场执行。
 						</p>
 						<span class="mono footer__stamp">MIT · NO FRAMEWORK OVERHEAD</span>
 					</div>

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 import type { Theme } from '../lib/theme';
-import { PREACT_VERSION, SIZE } from '../data/content';
+import { SIZE } from '../data/content';
 import { CopyButton } from './ui';
 
 function ByteGrid(props: { theme: Theme }) {
@@ -108,7 +108,7 @@ export function Hero(props: { theme: Theme }) {
 					</h1>
 
 					<p class="hero__lede">
-						{`与 React API 完全一致、体积小巧的现代替代方案。拥有虚拟 DOM 组件的全部能力，却没有相应的开销。这一页不是截图：下面的每个实验台，都由本站正在运行的 Preact ${PREACT_VERSION} 亲自驱动。`}
+						{`与 React API 完全一致、体积小巧的现代替代方案。拥有虚拟 DOM 组件的全部能力，却没有相应的开销。这一页不是截图：下面的每个实验台，都由本站正在运行的 Preact 亲自驱动。`}
 					</p>
 
 					<div class="hero__actions">

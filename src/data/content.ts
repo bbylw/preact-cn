@@ -1,6 +1,7 @@
 import type { CodeLang } from '../lib/highlight';
 
-export const PREACT_VERSION = '11.2.0';
+export const NPM_VERSION_BADGE =
+  'https://img.shields.io/npm/v/preact.svg?style=flat-square&color=5c34a6';
 
 export interface Snippet {
 	title: string;

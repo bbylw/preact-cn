@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import type { Theme } from '../lib/theme';
-import { PREACT_VERSION } from '../data/content';
+import { LINKS, NPM_VERSION_BADGE } from '../data/content';
 
 const NAV = [
 	{ href: '#top', label: '渲染路径' },
@@ -17,6 +17,7 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 	const dark = props.theme === 'dark';
 	const navRef = useRef<HTMLElement>(null);
 	const [active, setActive] = useState('');
+	const [badgeFailed, setBadgeFailed] = useState(false);
 
 	useEffect(() => {
 		const sections = Array.from(document.querySelectorAll<HTMLElement>('main section[id]'));
@@ -73,7 +74,26 @@ export function Header(props: { theme: Theme; onToggle: () => void; lifted: bool
 				</nav>
 
 				<div class="topbar__tools">
-					<span class="version mono">v{PREACT_VERSION}</span>
+					<a
+						class="version"
+						href={LINKS.npm}
+						target="_blank"
+						rel="noreferrer"
+						aria-label="查看 npm 上的 Preact 最新版本"
+					>
+						{badgeFailed ? (
+							<span class="version__fallback mono">npm 最新</span>
+						) : (
+							<img
+								class="version__badge"
+								src={NPM_VERSION_BADGE}
+								alt=""
+								height="20"
+								decoding="async"
+								onError={() => setBadgeFailed(true)}
+							/>
+						)}
+					</a>
 					<button
 						type="button"
 						class="theme-toggle"

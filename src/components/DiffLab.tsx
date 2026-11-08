@@ -1,6 +1,6 @@
 import { render } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { CODE, PREACT_VERSION } from '../data/content';
+import { CODE } from '../data/content';
 import { CopyButton, CodeBlock, Panel, SectionHead, Stat } from './ui';
 
 const INITIAL_ITEMS = ['保留的段落节点', '保留的列表节点'];
@@ -134,8 +134,6 @@ export function DiffLab() {
 				<div>
 					<div class="hero__eyebrow">
 						<span class="eyebrow">PREACT / RENDER PATH</span>
-						<span class="hero__rule" />
-						<span class="mono hero__issue">运行中的 Preact {PREACT_VERSION}</span>
 					</div>
 					<h1 class="hero__title">改一行，<em>只更新该更新的</em></h1>
 				</div>
