@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
-    "build:pages": "tsc --noEmit && vite build --mode pages",
     "check": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
     "preview": "vite preview"

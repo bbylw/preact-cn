@@ -1,9 +1,7 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 
-export default defineConfig(({ mode }) => ({
-  // GitHub Pages serves project sites under /<repo>/, while local preview uses /.
-  base: mode === 'pages' ? '/preact-cn/' : '/',
+export default defineConfig({
   plugins: [preact()],
   // README 里提到的 preact/compat 别名：React 生态代码无需改写即可运行
   resolve: {
@@ -18,4 +16,4 @@ export default defineConfig(({ mode }) => ({
     target: 'es2022',
     cssCodeSplit: false,
   },
-}));
+});
